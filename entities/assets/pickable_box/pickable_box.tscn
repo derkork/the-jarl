@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://dno5ylngvppes"]
+
+[ext_resource type="PackedScene" path="res://addons/godot-xr-tools/objects/pickable.tscn" id="1_m4u3j"]
+[ext_resource type="PackedScene" path="res://entities/utilities/debug_info/debug_info.tscn" id="2_2tsik"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_uqxlr"]
+size = Vector3(0.3, 0.3, 0.3)
+
+[node name="PickableBox" instance=ExtResource("1_m4u3j")]
+
+[node name="CollisionShape3D" parent="." index="1"]
+shape = SubResource("BoxShape3D_uqxlr")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="." index="2"]
+size = Vector3(0.3, 0.3, 0.3)
+
+[node name="DebugInfo" parent="." index="3" instance=ExtResource("2_2tsik")]
+text = "PickableBox
+transform:origin -> (0, 0, 0)
+picked_up_by -> <null>
+"

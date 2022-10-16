@@ -1,0 +1,50 @@
+[gd_scene load_steps=6 format=3 uid="uid://cdd2p0g1pnbwd"]
+
+[ext_resource type="PackedScene" uid="uid://b4ysuy43poobf" path="res://addons/godot-xr-tools/functions/function_pickup.tscn" id="1_hobqu"]
+[ext_resource type="PackedScene" uid="uid://bl2nuu3qhlb5k" path="res://addons/godot-xr-tools/functions/movement_direct.tscn" id="1_i0lc1"]
+[ext_resource type="PackedScene" uid="uid://dwc7cx5txw3ix" path="res://addons/godot-xr-tools/assets/player_body.tscn" id="2_no3xd"]
+[ext_resource type="PackedScene" uid="uid://b6bk2pj8vbj28" path="res://addons/godot-xr-tools/functions/movement_turn.tscn" id="3_3w170"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_qatok"]
+radius = 0.1
+
+[node name="Player" type="XROrigin3D"]
+
+[node name="XRCamera3D" type="XRCamera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
+
+[node name="LeftHand" type="XRController3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 1, -0.5)
+tracker = &"left_hand"
+
+[node name="CSGSphere3D" type="CSGSphere3D" parent="LeftHand"]
+radius = 0.1
+
+[node name="FunctionPickup" parent="LeftHand" instance=ExtResource("1_hobqu")]
+
+[node name="MovementDirect" parent="LeftHand" instance=ExtResource("1_i0lc1")]
+
+[node name="MovementTurn" parent="LeftHand" instance=ExtResource("3_3w170")]
+
+[node name="LeftHandArea" type="Area3D" parent="LeftHand" groups=["player_hand"]]
+monitoring = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LeftHand/LeftHandArea"]
+shape = SubResource("SphereShape3D_qatok")
+
+[node name="RightHand" type="XRController3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1, -0.5)
+tracker = &"right_hand"
+
+[node name="CSGSphere3D" type="CSGSphere3D" parent="RightHand"]
+radius = 0.1
+
+[node name="FunctionPickup" parent="RightHand" instance=ExtResource("1_hobqu")]
+
+[node name="RightHandArea" type="Area3D" parent="RightHand" groups=["player_hand"]]
+monitoring = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RightHand/RightHandArea"]
+shape = SubResource("SphereShape3D_qatok")
+
+[node name="PlayerBody" parent="." instance=ExtResource("2_no3xd")]

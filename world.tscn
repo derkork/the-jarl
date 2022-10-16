@@ -1,0 +1,66 @@
+[gd_scene load_steps=10 format=3 uid="uid://c5iqpoldmopwf"]
+
+[ext_resource type="PackedScene" uid="uid://cdd2p0g1pnbwd" path="res://entities/player/player.tscn" id="1_l7yde"]
+[ext_resource type="Script" path="res://world.gd" id="1_xa8wn"]
+[ext_resource type="PackedScene" uid="uid://b667wr2d737nr" path="res://entities/assets/invisible_wall/invisible_wall.tscn" id="3_etijq"]
+[ext_resource type="PackedScene" uid="uid://eg1n2ijdrv0a" path="res://entities/assets/teleporter_platform/teleporter_platform.tscn" id="4_tphwe"]
+[ext_resource type="PackedScene" uid="uid://dwoqkeqrdkfsi" path="res://entities/assets/teleporter_stone/teleporter_stone.tscn" id="5_svawy"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mmugq"]
+albedo_color = Color(0.121569, 0.388235, 0.0901961, 1)
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_12pd3"]
+
+[sub_resource type="Sky" id="Sky_qyn5t"]
+sky_material = SubResource("ProceduralSkyMaterial_12pd3")
+
+[sub_resource type="Environment" id="Environment_6e2af"]
+background_mode = 2
+background_energy_multiplier = 1.55
+sky = SubResource("Sky_qyn5t")
+ambient_light_source = 3
+
+[node name="World" type="Node3D"]
+script = ExtResource("1_xa8wn")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.447681, 0.894193, 0, -0.894193, 0.447681, 0, 4.87122, 0)
+
+[node name="Ground" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+use_collision = true
+size = Vector3(50, 1, 50)
+material = SubResource("StandardMaterial3D_mmugq")
+
+[node name="Player" parent="." instance=ExtResource("1_l7yde")]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_6e2af")
+
+[node name="InvisibleWall" parent="." instance=ExtResource("3_etijq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -25)
+size = Vector3(50, 10, 1)
+
+[node name="InvisibleWall4" parent="." instance=ExtResource("3_etijq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 25)
+size = Vector3(50, 10, 1)
+
+[node name="InvisibleWall2" parent="." instance=ExtResource("3_etijq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 0, 0)
+size = Vector3(1, 10, 50)
+
+[node name="InvisibleWall3" parent="." instance=ExtResource("3_etijq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 0, 0)
+size = Vector3(1, 10, 50)
+
+[node name="TeleporterPlatform" parent="." instance=ExtResource("4_tphwe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.812739, 4.76837e-07, -6.9202)
+
+[node name="TeleporterPlatform2" parent="." instance=ExtResource("4_tphwe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.24086, 4.76837e-07, -6.9202)
+
+[node name="TeleporterStone" parent="." instance=ExtResource("5_svawy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.42783, 0.339986, -4.34144)
+
+[node name="TeleporterStone2" parent="." instance=ExtResource("5_svawy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.627924, 0.339986, -4.3089)

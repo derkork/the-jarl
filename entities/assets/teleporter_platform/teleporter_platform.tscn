@@ -1,0 +1,81 @@
+[gd_scene load_steps=7 format=3 uid="uid://eg1n2ijdrv0a"]
+
+[ext_resource type="Script" path="res://entities/assets/teleporter_platform/teleporter_platform.gd" id="1_h83r6"]
+[ext_resource type="PackedScene" uid="uid://b1ifyw7oron8y" path="res://entities/utilities/debug_info/debug_info.tscn" id="2_tc1kc"]
+[ext_resource type="Script" path="res://entities/utilities/debug_info/debug_watch.gd" id="3_m34nx"]
+
+[sub_resource type="Resource" id="Resource_q34m0"]
+script = ExtResource("3_m34nx")
+title = ""
+node = NodePath("..")
+properties = ["_teleporter_stone", "_teleport_requested", "_teleport_countdown_seconds", "_teleport_possible", "_player_body"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_w0j4d"]
+size = Vector3(0.5, 0.5, 0.5)
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_s2jvu"]
+radius = 1.0
+
+[node name="TeleporterPlatform" type="Node3D"]
+script = ExtResource("1_h83r6")
+
+[node name="DebugInfo" parent="." instance=ExtResource("2_tc1kc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.027251, 0.861996, -1.06668)
+text = "TeleporterPlatform
+_teleporter_stone -> <null>
+_teleport_requested -> <null>
+_teleport_countdown_seconds -> <null>
+_teleport_possible -> <null>
+_player_body -> <null>
+"
+watches = [SubResource("Resource_q34m0")]
+
+[node name="StonePedestal" type="CSGCylinder3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -1)
+use_collision = true
+radius = 0.15
+height = 1.0
+sides = 6
+
+[node name="StonePedestalTop" type="CSGCylinder3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95733, -1)
+use_collision = true
+radius = 0.3
+height = 0.1
+sides = 6
+
+[node name="Platform" type="CSGCylinder3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0)
+use_collision = true
+radius = 1.0
+height = 0.1
+sides = 6
+
+[node name="PlacementArea" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, -1)
+monitorable = false
+gravity_point = true
+gravity_point_center = Vector3(0, 0, 0)
+gravity_direction = Vector3(0, 0, 0)
+linear_damp = 35.0
+angular_damp = 0.5
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PlacementArea"]
+shape = SubResource("BoxShape3D_w0j4d")
+
+[node name="PlayerArea" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+collision_layer = 0
+collision_mask = 524288
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayerArea"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CylinderShape3D_s2jvu")
+
+[connection signal="area_entered" from="PlacementArea" to="." method="_on_placement_area_area_entered"]
+[connection signal="area_exited" from="PlacementArea" to="." method="_on_placement_area_area_exited"]
+[connection signal="body_entered" from="PlacementArea" to="." method="_on_placement_area_body_entered"]
+[connection signal="body_exited" from="PlacementArea" to="." method="_on_placement_area_body_exited"]
+[connection signal="body_entered" from="PlayerArea" to="." method="_on_player_area_body_entered"]
+[connection signal="body_exited" from="PlayerArea" to="." method="_on_player_area_body_exited"]

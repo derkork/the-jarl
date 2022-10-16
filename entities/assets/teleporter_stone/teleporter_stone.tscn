@@ -1,0 +1,46 @@
+[gd_scene load_steps=8 format=3 uid="uid://dwoqkeqrdkfsi"]
+
+[ext_resource type="PackedScene" uid="uid://dq8dfkqbqv7s5" path="res://addons/godot-xr-tools/objects/pickable.tscn" id="1_m4u3j"]
+[ext_resource type="PackedScene" uid="uid://b1ifyw7oron8y" path="res://entities/utilities/debug_info/debug_info.tscn" id="2_2tsik"]
+[ext_resource type="Script" path="res://entities/utilities/debug_info/debug_watch.gd" id="3_tyogg"]
+[ext_resource type="Script" path="res://entities/assets/teleporter_stone/teleporter_stone.gd" id="4_2frys"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_uqxlr"]
+size = Vector3(0.3, 0.3, 0.3)
+
+[sub_resource type="Resource" id="Resource_ev0a7"]
+script = ExtResource("3_tyogg")
+title = "Teleporter Stone"
+node = NodePath("..")
+properties = ["bound_target", "_binding_time_seconds_left", "_current_binding_target", "is_picked_up", "teleport_enabled", "teleport_location"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_eqttk"]
+radius = 0.3
+
+[node name="TeleporterStone" instance=ExtResource("1_m4u3j")]
+script = ExtResource("4_2frys")
+
+[node name="CollisionShape3D" parent="." index="1"]
+shape = SubResource("BoxShape3D_uqxlr")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="." index="2"]
+size = Vector3(0.3, 0.3, 0.3)
+
+[node name="DebugInfo" parent="." index="3" instance=ExtResource("2_2tsik")]
+text = "Teleporter Stone
+bound_target -> <null>
+_binding_time_seconds_left -> <null>
+_current_binding_target -> <null>
+is_picked_up -> <null>
+teleport_enabled -> <null>
+teleport_location -> <null>
+"
+watches = [SubResource("Resource_ev0a7")]
+
+[node name="ConnectorArea" type="Area3D" parent="." index="4"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ConnectorArea" index="0"]
+shape = SubResource("SphereShape3D_eqttk")
+
+[connection signal="area_entered" from="ConnectorArea" to="." method="_on_connector_area_area_entered"]
+[connection signal="area_exited" from="ConnectorArea" to="." method="_on_connector_area_area_exited"]
